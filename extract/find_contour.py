@@ -62,7 +62,7 @@ def get_normal_contour(img):
     cv2.destroyAllWindows()
 
 # def get_contours(path):
-def crop_images(mask_path , original_image_path , index):
+def crop_images(mask_path , original_image_path , index , app_mvtec_dataset):
     transform=transforms.Compose([
                 transforms.Resize(256, interpolation=transforms.InterpolationMode.BICUBIC),
                 transforms.CenterCrop(224),
@@ -75,11 +75,9 @@ def crop_images(mask_path , original_image_path , index):
     original_image = transform(original_image)
     # transform = transforms.ToPILImage()
     # original_image = transform(original_image)
-    print(type(original_image))
     # original_image.save('/home/srijan/crop/ind_knn_ad/road_res/org.png')
     # print(type(original_image) , original_image.shape)
     img = mask
-    print("Mask shape" , img.shape)
     scale = 1.5
     # all_contours = get_scaled_contour(img, scale)
     all_contours = get_normal_contour(img)
@@ -98,12 +96,8 @@ def crop_images(mask_path , original_image_path , index):
     # cv2.drawContours(result_image, [get_scaled_contour(contours, scale)], -1, (255, 255, 0, 100), 2)
     x,y,w,h = cv2.boundingRect(contours)
     original_image = np.array(original_image)
-    org_path = f"org_img/org{index}.png"
-    
     cv2.rectangle(original_image,(x,y),(x+w,y+h),(255,0,0),3)
-    cv2.imwrite(org_path , original_image)
     cropped_image = original_image[y:y+h,x:x+w]
-    cropped_folder_path = f"cropped/crop{index}.png"
-    cv2.imwrite(cropped_folder_path , cropped_image)
+    cropped_dir_path = f"cropped_{app_mvtec_dataset}/crop_{index}.png"
+    cv2.imwrite(cropped_dir_path , cropped_image)
 
-# crop_images('/home/srijan/crop/ind_knn_ad/road_res/mask0.png' , '/home/srijan/crop/ind_knn_ad/datasets/road/test/defect/img699.jpg' , 0)
