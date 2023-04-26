@@ -8,6 +8,7 @@ from time import sleep
 import cv2
 from PIL import Image
 import io
+import shutil
 import numpy as np
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
@@ -23,7 +24,8 @@ N_IMAGE_GALLERY = 4
 N_PREDICTIONS = 2
 METHODS = ["SPADE", "PaDiM", "PatchCore"]
 BACKBONES = ["efficientnet_b0", "tf_mobilenetv3_small_100"]
-
+app_mvtec_dataset = 'road'
+app_backbone = 'efficientnet_b0'
 # keep the two smallest datasets
 mvtec_classes = ["hazelnut_reduced", "transistor_reduced"]
 
@@ -53,13 +55,15 @@ def show_pred(sample, score, fmap, range , index, original_image_path):
     plt.savefig(buf, format='png', bbox_inches='tight', pad_inches=0, transparent=True)
     buf.seek(0)
     overlay_img = Image.open(buf)
-    ls = original_image_path.split('/')
-    # print(ls)
-    dot_split = ls[-1].split('.')
-    if "normal" in ls:
-        save_path = f"road_heatmap/normal/normal_{dot_split[0]}.png"
+    heatmap_path_split = original_image_path.split('/')
+    heatmap_path = heatmap_path_split[-1].split('.')[0]
+    heatmap_dir_path = f"{app_mvtec_dataset}_heatmap"
+    normal_image_heatmap_dir = f"{heatmap_dir_path}/normal"
+    abnormal_image_heatmap_dir = f"{heatmap_dir_path}/abnormal"
+    if "normal" in heatmap_path_split:
+        save_path = f"{normal_image_heatmap_dir}/normal_{heatmap_path}.png"
     else:
-        save_path = f"road_heatmap/abnormal/abnormal_{dot_split[0]}.png"
+        save_path = f"{abnormal_image_heatmap_dir}/abnormal_{heatmap_path}.png"
     
     overlay_img.save(save_path)
     # actual display
@@ -90,8 +94,7 @@ def pytoimg(tensor):
 
 def main():
 
-    app_mvtec_dataset = 'road'
-    app_backbone = 'efficientnet_b0'
+    
         # LOAD DATA  
     train_dataset, test_dataset = MVTecDataset(app_mvtec_dataset).get_datasets()
             
@@ -107,63 +110,57 @@ def main():
 
         # TESTING
         # -------  
-    print(len(test_dataset))
+    #Creating heatmap directory 
+    heatmap_dir_path = f"{app_mvtec_dataset}_heatmap"
+    try:
+        shutil.rmtree(heatmap_dir_path)
+    except:
+        print("No heatmap directory exists...creating one")
+    os.mkdir(heatmap_dir_path)
+    normal_image_heatmap_dir = f"{heatmap_dir_path}/normal"
+    abnormal_image_heatmap_dir = f"{heatmap_dir_path}/abnormal"
+    os.mkdir(normal_image_heatmap_dir)
+    os.mkdir(abnormal_image_heatmap_dir)
+
+    #Creating cropped folder
+
+    cropped_dir_path = f"cropped_{app_mvtec_dataset}"
+    try:
+        shutil.rmtree(cropped_dir_path)
+    except:
+        print("No heatmap directory exists...creating one")
+    os.mkdir(cropped_dir_path)
+    #Creating mask directory
+    mask_dir_name = f"{app_mvtec_dataset}_res"
+    try:
+        shutil.rmtree(mask_dir_name)
+    except:
+        print("No mask directory exist....creating one")
+    os.mkdir(mask_dir_name)
+
     for index in range(len(test_dataset)):
         sample,original_image_path,*_ = test_dataset[index]
         img_lvl_anom_score, pxl_lvl_anom_score = model.predict(sample.unsqueeze(0))
-        cpl = pxl_lvl_anom_score
-        cpl = cpl.numpy()
-        print(img_lvl_anom_score)
-        # print(type(cpl))
-        # print(cpl.shape)
-        # print(cpl)
-        ls = original_image_path.split('/')
-        # print(ls)
-        dot_split = ls[-1].split('.')
+        pxl_score_copy = pxl_lvl_anom_score
+        pxl_score_copy = pxl_score_copy.numpy()
+        # print(img_lvl_anom_score)
+        split_path = original_image_path.split('/')[-1].split('.')
         new_img = np.zeros(shape = (224,224))
+        thresh = 33
         for i in range(224):
             for j in range(224):
-                if cpl[0][j][i] > 33:
+                if pxl_score_copy[0][j][i] > thresh:
                     new_img[j][i] = 255
         
-        mask_path = f"road_res/mask{dot_split[0]}.png"
+        mask_path = f"{mask_dir_name}/mask_{split_path[0]}.png"
         
         cv2.imwrite(mask_path , new_img)
         score_range = pxl_lvl_anom_score.min(), pxl_lvl_anom_score.max()
         color_range = score_range
-        # print(original_image_path)
         show_pred(sample , img_lvl_anom_score , pxl_lvl_anom_score , color_range , index, original_image_path)
-        crop_images(mask_path , original_image_path , index)
-    # print(type(sample))
+        crop_images(mask_path , original_image_path , index, app_mvtec_dataset)
     
     print("Success!")
-    # print(sample.dtype)
-    # pytoimg(sample)
-    # print(img_lvl_anom_score)
-    # sample_img = (sample.cpu().numpy())
-    # print(sample.size())
-    # pytoimg(sample)
-    # print("Sample type " , (sample_img.shape))
-    # smg = Image.fromarray(sample_img , 'RGB')
-    # smg.save('test_sample.png')
-    # print("sample size " , sample.size())
-    # print("type is" , type(pxl_lvl_anom_score))
-    # print("Len is " , (pxl_lvl_anom_score.size()))
-    # cpl = pxl_lvl_anom_score
-    # cpl = cpl.numpy()
-    # print(type(cpl))
-    # print(cpl.shape)
-    # print(cpl)
-    # new_img = np.zeros(shape = (224,224))
-    # for i in range(224):
-    #     for j in range(224):
-    #         if cpl[0][j][i] > img_lvl_anom_score:
-    #             new_img[j][i] = 255
-    
-    # cv2.imwrite('new_img_rev1.png' , cpl  )
-    
-    # score_range = pxl_lvl_anom_score.min(), pxl_lvl_anom_score.max()
-    # show_pred(sample, img_lvl_anom_score, pxl_lvl_anom_score, color_range)
 
     
 if __name__ == "__main__":
