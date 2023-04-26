@@ -8,7 +8,7 @@ import timm
 
 import numpy as np
 from sklearn.metrics import roc_auc_score
-
+from sklearn.utils.multiclass import type_of_target
 from utils import GaussianBlur, get_coreset_idx_randomp, get_tqdm_params
 
 
@@ -71,7 +71,14 @@ class KNNExtractor(torch.nn.Module):
 			pixel_labels.extend(mask.flatten().numpy())
 			
 		image_preds = np.stack(image_preds)
-
+		# image_labels = image_labels.astype(int)
+		# img_lab = image_labels
+		# for x in img_lab:
+			
+		print("image label is :" , image_labels)
+		print("image pred is :" , image_preds)
+		print(type_of_target(image_labels))
+		print(type_of_target(image_preds))
 		image_rocauc = roc_auc_score(image_labels, image_preds)
 		pixel_rocauc = roc_auc_score(pixel_labels, pixel_preds)
 

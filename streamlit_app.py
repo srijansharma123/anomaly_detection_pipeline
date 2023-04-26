@@ -21,7 +21,6 @@ N_IMAGE_GALLERY = 4
 N_PREDICTIONS = 2
 METHODS = ["SPADE", "PaDiM", "PatchCore"]
 BACKBONES = ["efficientnet_b0", "tf_mobilenetv3_small_100"]
-
 # keep the two smallest datasets
 mvtec_classes = ["hazelnut_reduced", "transistor_reduced"]
 
@@ -39,7 +38,7 @@ def pred_to_img(x, range):
         x /= (range_max - range_min)
     return tensor_to_img(x)
 
-def show_pred(sample, score, fmap, range):
+def show_pred(sample, score, fmap, range , test_num):
     sample_img = tensor_to_img(sample, normalize=True)
     fmap_img = pred_to_img(fmap, range)
 
@@ -51,7 +50,8 @@ def show_pred(sample, score, fmap, range):
     plt.savefig(buf, format='png', bbox_inches='tight', pad_inches=0, transparent=True)
     buf.seek(0)
     overlay_img = Image.open(buf)
-
+    # savepath = "/Users/srijan/Desktop/ind_knn_ad/road_res/" +"t" +  str(test_num) + ".png"
+    # overlay_img.save(savepath)
     # actual display
     cols = st.columns(3)
     cols[0].subheader("Test sample")
@@ -134,7 +134,9 @@ def main():
                     train_dataset = StreamingDataset()
                     test_dataset = StreamingDataset()
                     # train images
+                    st.write("Type of app_cus" , type(app_custom_train_images))
                     for training_image in app_custom_train_images:
+                        st.write("Training image" , type(training_image))
                         bytes_data = training_image.getvalue()
                         train_dataset.add_pil_image(
                             Image.open(io.BytesIO(bytes_data))
@@ -198,9 +200,10 @@ def main():
         # --------
 
         if not st.session_state.reached_test_phase:
-            with st_stdout("info", "Setting up training ..."):            
+            with st_stdout("info", "Setting up training ..."):
+                           
                 model.fit(DataLoader(train_dataset))
-
+        st.write("Type is " , type(train_dataset)) 
         # TESTING
         # -------
 
@@ -216,13 +219,29 @@ def main():
             min_value = 0,
             max_value = len(test_dataset)-1,
         )
-        
+        print("Type of test dataset is: " , type(test_dataset))
         sample, *_ = test_dataset[st.session_state.test_idx]
+        # print(type(sample))
+        # print(sample.size() , sample.dtype)
         img_lvl_anom_score, pxl_lvl_anom_score = model.predict(sample.unsqueeze(0))
+        # st.write(img_lvl_anom_score)
+        # st.write(pxl_lvl_anom_score)
         score_range = pxl_lvl_anom_score.min(), pxl_lvl_anom_score.max()
         if not manualRange:
             color_range = score_range
-        show_pred(sample, img_lvl_anom_score, pxl_lvl_anom_score, color_range)
+
+        cpl = pxl_lvl_anom_score
+        cpl = cpl.numpy()
+        # print(type(cpl))
+        # print(cpl.shape)
+        # print(cpl)
+        new_img = np.zeros(shape = (224,224))
+        for i in range(224):
+            for j in range(224):
+                if cpl[0][j][i] > img_lvl_anom_score:
+                    new_img[j][i] = 255
+        show_pred(sample, img_lvl_anom_score, pxl_lvl_anom_score, color_range,st.session_state.test_idx)
+        
         st.write("pixel score min:{:.0f}".format(score_range[0]))
         st.write("pixel score max:{:.0f}".format(score_range[1]))
 

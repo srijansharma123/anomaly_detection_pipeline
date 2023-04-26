@@ -31,6 +31,8 @@ def mvtec_classes():
         "transistor",
         "wood",
         "zipper",
+        "potato",
+        "road",
     ]
 
 class MVTecDataset:

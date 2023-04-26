@@ -41,6 +41,8 @@ def run_model(method: str, classes: List):
                 backbone_name="wide_resnet50_2",
             )
 
+        print("Model is" , model)
+        print("CLS is " , cls)
         print(f"\n█│ Running {method} on {cls} dataset.")
         print(  f" ╰{'─'*(len(method)+len(cls)+23)}\n")
         train_ds, test_ds = MVTecDataset(cls).get_dataloaders()
