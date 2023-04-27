@@ -36,6 +36,7 @@ To run the code just use below command
 $ python generate_results.py
 ```
 This command will generate 3 folders : 
+
     1 - {dataset}_heatmap : The predictions heatmap from patchcore model
     2 - {dataset}_res : The corresponding masks for the anomaly part
     3 - cropped_{dataset} : The cropped anomaly part
