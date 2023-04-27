@@ -49,14 +49,14 @@ This command will generate 3 folders :
 
 Follow the below folder structure : Place normal images under train/good/  and abnormal images under test/defect/
 
----road--
-         |
-         |__train---
-         |          |___good-------img1
-         |                      |___img2..
-         |___test
-                |____defect---img1
-                           |___img2...
+---road-- <br>
+         | <br>
+         |__train---  <br>
+         |          |___good-------img1.   <br>
+         |                      |___img2..   <br>
+         |___test.  <br>
+                |____defect---img1.   <br>
+                           |___img2...   <br>
          
 
 
