@@ -41,18 +41,16 @@ This command will generate 3 folders :
     2 - {dataset}_res : The corresponding masks for the anomaly part
     3 - cropped_{dataset} : The cropped anomaly part
 
-```
-The code is setup using road dataset that can be found under /datasets/road directory
-To setup your dataset and train patchcore put you dataset (say "hello" is the name of your dataset) in the /datasets/ directory
+-> The code is setup using road dataset that can be found under /datasets/road directory.
+-> To setup your dataset and train patchcore put you dataset (say "hello" is the name of your dataset) in the /datasets/ directory
+-> Now go to indad/new_data/ folder and add your dataset folder name to the function mvtec_classes()
+
+Follow the below folder structure : 
 
 
 ---
 
 
-## Acknowledgements
-
--  [hcw-00](https://github.com/hcw-00) for tipping `sklearn.random_projection.SparseRandomProjection`.
--  [h1day](https://github.com/h1day) for adding a custom range to the streamlit app.
 
 ## References
 
