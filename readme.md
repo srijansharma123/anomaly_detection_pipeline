@@ -54,6 +54,7 @@ Follow the below folder structure : Place normal images under train/good/  and a
          |__train---  <br>
          |          |___good-------img1.   <br>
          |                      |___img2..   <br>
+         |.   <br>
          |___test.  <br>
                 |____defect---img1.   <br>
                            |___img2...   <br>
