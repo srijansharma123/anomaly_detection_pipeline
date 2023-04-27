@@ -7,16 +7,24 @@
 This repo implements an anomaly detection pipeline using Patchcore and other anomaly detection models :
 
 
-\* actually does not have any knn mechanism, but shares many things implementation-wise.
-
 ---
 
 ## Install
 
 ```shell
-#Create a new conda environment using python 3.6.13 using below command
+# Create a new conda environment using python 3.6.13 using below command
+
 $ conda create -n test_env python==3.6.13
-$ pipenv install -r requirements.txt
+
+# Install other dependencies using requirements.txt file
+
+$ pip install -r requirements.txt
+
+# Next install torch , i used torch 1.9.0 + cu111
+
+$ pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
+
+# Your environment is set now!
 ```
 
 ## Usage
