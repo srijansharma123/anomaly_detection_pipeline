@@ -31,21 +31,12 @@ $ pip install torch==1.9.0+cu111 torchvision==0.10.0+cu111 torchaudio==0.9.0 -f 
 
 CLI:
 ```shell
-$ python indad/run.py METHOD [--dataset DATASET]
+To run the code just use below command
+
+$ python generate_results.py
 ```
 Results can be found under `./results/`.
 
-Code example:
-```python
-from indad.model import SPADE
-
-model = SPADE(k=5, backbone_name="resnet18")
-
-# feed healthy dataset
-model.fit(...)
-
-# get predictions
-img_lvl_anom_score, pxl_lvl_anom_score = model.predict(...)
 ```
 
 ### Custom datasets
