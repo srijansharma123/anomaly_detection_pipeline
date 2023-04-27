@@ -47,7 +47,16 @@ This command will generate 3 folders :
 
 -> Now go to indad/new_data/ folder and add your dataset folder name to the function mvtec_classes()
 
-Follow the below folder structure : 
+Follow the below folder structure : Place normal images under train/good/  and abnormal images under test/defect/
+
+---road--
+         |__train---
+         |          |___good-------img1
+         |                      |___img2..
+         |___test
+                |____defect---img1
+                           |___img2...
+         
 
 
 ---
