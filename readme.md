@@ -59,7 +59,7 @@ Follow the below folder structure : Place normal images under train/good/  and a
   
   You can add more defects in the test folder like defect1 , defect2 and place other type of defects in separate folder
 ```
-
+Docker support will be provided soon...
 
 ---
 
