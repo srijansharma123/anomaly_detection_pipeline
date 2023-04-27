@@ -6,6 +6,7 @@
 
 This repo implements an anomaly detection pipeline using Patchcore and other anomaly detection models :
 
+Wiki Link - [https://wiki.exwzd.com/pages/viewpage.action?spaceKey=EI&title=Anomaly+Detection+Pipeline]
 
 ---
 
