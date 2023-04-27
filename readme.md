@@ -50,6 +50,7 @@ This command will generate 3 folders :
 Follow the below folder structure : Place normal images under train/good/  and abnormal images under test/defect/
 
 ---road--
+         |
          |__train---
          |          |___good-------img1
          |                      |___img2..
