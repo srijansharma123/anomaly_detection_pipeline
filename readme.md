@@ -42,32 +42,9 @@ This command will generate 3 folders :
     3 - cropped_{dataset} : The cropped anomaly part
 
 ```
+The code is setup using road dataset that can be found under /datasets/road directory
+To setup your dataset and train patchcore put you dataset (say "hello" is the name of your dataset) in the /datasets/ directory
 
-### Custom datasets
-<details>
-  <summary> 👁️ </summary>
-
-Check out one of the downloaded MVTec datasets.
-Naming of images should correspond among folders.
-Right now there is no support for no ground truth pixel masks.
-
-```
-📂datasets
- ┗ 📂your_custom_dataset
-  ┣ 📂 ground_truth/defective
-  ┃ ┣ 📂 defect_type_1
-  ┃ ┗ 📂 defect_type_2
-  ┣ 📂 test
-  ┃ ┣ 📂 defect_type_1
-  ┃ ┣ 📂 defect_type_2
-  ┃ ┗ 📂 good
-  ┗ 📂 train/good
-```
-
-```shell
-$ python indad/run.py METHOD --dataset your_custom_dataset
-```
-</details>
 
 ---
 
