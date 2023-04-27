@@ -49,16 +49,16 @@ This command will generate 3 folders :
 
 Follow the below folder structure : Place normal images under train/good/  and abnormal images under test/defect/
 
----road-- <br>
-         | <br>
-         |__train---  <br>
-         |          |___good-------img1.   <br>
-         |                      |___img2..   <br>
-         |.   <br>
-         |___test.  <br>
-                |____defect---img1.   <br>
-                           |___img2...   <br>
-         
+
+```
+📂datasets
+ ┗ 📂your_custom_dataset
+  ┣ 📂 test
+  ┃ ┣ 📂 defect
+  ┗ 📂 train/good
+  
+  You can add more defects in the test folder like defect1 , defect2 and place other type of defects in separate folder
+```
 
 
 ---
