@@ -20,6 +20,8 @@ This repo aims to reproduce the results of the following KNN-based anomaly detec
 ## Install
 
 ```shell
+#Create a new conda environment using python 3.6.13 using below command
+$ conda create -n test_env python==3.6.13
 $ pipenv install -r requirements.txt
 ```
 
